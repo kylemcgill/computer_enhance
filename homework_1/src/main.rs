@@ -52,6 +52,7 @@ fn get_op_code_name(op_code: u8) -> String {
 
 fn disassemble(contents: Vec<u8>) {
     println!("Size of contents: {} bytes", contents.len());
+    let mut disassembly = String::new();
     for index in (0..contents.len()).step_by(2) {
         let left_side: u8 = contents[index];
         let right_side: u8 = contents[index + 1];
@@ -75,13 +76,16 @@ fn disassemble(contents: Vec<u8>) {
         let right_register_name = get_register_name(right_register, word_operation);
         println!("left register {}", left_register_name);
         println!("right register {}", right_register_name);
-        
-        if direction == 1{
-            println!("{} {}, {}", op_name, right_register_name, left_register_name);
-        } else {
-            println!("{} {}, {}", op_name, left_register_name, right_register_name);
-        }    
+
+        // Direction does not affect the order of the 
+        // registers as they are written out in assembly 
+        // language. Might have to take a look at this later.
+        println!("direction is {}", direction);
+
+        let formatted_string = format!("{} {}, {}\n", op_name, right_register_name, left_register_name);
+        disassembly.push_str(&formatted_string);
     }    
+    println!("\n{}", disassembly);
 }
 fn main() -> std::io::Result<()> {
     let args: Vec<String> = env::args().collect();
